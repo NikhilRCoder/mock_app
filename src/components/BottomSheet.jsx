@@ -25,7 +25,7 @@ export default function BottomSheet({ sheet, sheetDoc, onClose }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        style={{ background: "#fff", borderRadius: "20px 20px 0 0", padding: "10px 20px 34px", animation: "dlUp .34s cubic-bezier(.22,1,.36,1) both" }}
+        style={{ background: "#fff", borderRadius: "20px 20px 0 0", padding: "10px 20px calc(34px + env(safe-area-inset-bottom))", animation: "dlUp .34s cubic-bezier(.22,1,.36,1) both" }}
       >
         <div style={{ width: 42, height: 4, borderRadius: 2, background: "#dcdbe6", margin: "4px auto 18px" }} />
         <div style={{ fontSize: 21, fontWeight: 800, letterSpacing: "-.2px" }}>{title}</div>

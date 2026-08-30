@@ -23,9 +23,11 @@ export const UTILITY_LABELS = [
 
 export const QUICK_LINK_LABELS = ["My Account", "Nominee", "My Activity"];
 
+// Field metadata + the default value shown until the user edits and saves
+// their own (see storage.js — edits are persisted to localStorage).
 export const PROFILE_FIELDS = [
-  { key: "dob", label: "DOB", value: "04-10-2003", warn: "", editable: false },
-  { key: "gender", label: "Gender", value: "Male", warn: "", editable: false },
-  { key: "mobile", label: "Mobile", value: "9•••••••••6", warn: "", editable: true, toast: "Edit mobile number" },
-  { key: "email", label: "Email", value: "a•••••••••@gmail.com", warn: "⚠", editable: true, toast: "Email not verified — tap to verify" },
+  { key: "dob", label: "DOB", defaultValue: "04-10-2003", warn: "", inputMode: "text" },
+  { key: "gender", label: "Gender", defaultValue: "Male", warn: "", inputMode: "text" },
+  { key: "mobile", label: "Mobile", defaultValue: "9•••••••••6", warn: "", inputMode: "tel" },
+  { key: "email", label: "Email", defaultValue: "a•••••••••@gmail.com", warn: "⚠", inputMode: "email" },
 ];

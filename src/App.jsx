@@ -9,6 +9,7 @@ import ProfileScreen from "./components/ProfileScreen";
 import TabBar from "./components/TabBar";
 import BottomSheet from "./components/BottomSheet";
 import Toast from "./components/Toast";
+import { loadProfileFields, saveProfileFields } from "./storage";
 
 const USER_NAME = "Ashish Mahale";
 
@@ -20,6 +21,7 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [toast, setToast] = useState("");
   const [refreshing, setRefreshing] = useState(false);
+  const [fieldValues, setFieldValues] = useState(loadProfileFields);
 
   const toastTimer = useRef(null);
   const refreshTimer = useRef(null);
@@ -74,6 +76,15 @@ export default function App() {
     setTab("home");
   }
 
+  function updateField(key, value) {
+    setFieldValues((prev) => {
+      const next = { ...prev, [key]: value };
+      saveProfileFields(next);
+      return next;
+    });
+    showToast("Saved");
+  }
+
   const menuRows = [
     { label: "My Profile", color: "#1b1b22", onTap: openProfile },
     { label: "My Account", color: "#1b1b22", onTap: () => showToast("My Account") },
@@ -89,20 +100,7 @@ export default function App() {
   const indicatorColor = isSplash ? "#ffffff" : "#1b1b22";
 
   return (
-    <div
-      className="dl-phone"
-      style={{
-        width: 393,
-        height: 852,
-        position: "relative",
-        overflow: "hidden",
-        background: "#f4f4f7",
-        fontFamily: "'Nunito Sans', system-ui, sans-serif",
-        color: "#1b1b22",
-        borderRadius: 28,
-        boxShadow: "0 30px 80px rgba(27,27,45,.28)",
-      }}
-    >
+    <div className="dl-phone">
       <StatusBar color="#fff" />
 
       {isSplash && <SplashScreen />}
@@ -131,11 +129,12 @@ export default function App() {
         <ProfileScreen
           userName={USER_NAME}
           refreshing={refreshing}
+          fieldValues={fieldValues}
+          onFieldChange={updateField}
           onBack={backToTabs}
           onRefresh={refreshProfile}
           onShare={() => showToast("Share sheet would open")}
           onOpenVcard={() => setSheet("vcard")}
-          onFieldEdit={(f) => showToast(f.toast)}
           onQuickLink={(label) => showToast(label)}
         />
       )}
@@ -151,7 +150,7 @@ export default function App() {
           position: "absolute",
           left: "50%",
           transform: "translateX(-50%)",
-          bottom: 8,
+          bottom: "calc(8px + env(safe-area-inset-bottom))",
           zIndex: 90,
           width: 140,
           height: 5,

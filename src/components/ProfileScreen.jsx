@@ -1,7 +1,57 @@
+import { useState } from "react";
 import Placeholder from "./Placeholder";
 import { PROFILE_FIELDS, QUICK_LINK_LABELS } from "../data";
 
-export default function ProfileScreen({ userName, refreshing, onBack, onRefresh, onShare, onOpenVcard, onFieldEdit, onQuickLink }) {
+function ProfileField({ field, value, onChange }) {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(value);
+
+  function commit() {
+    setEditing(false);
+    const next = draft.trim();
+    if (next !== value) onChange(field.key, next);
+  }
+
+  function cancel() {
+    setDraft(value);
+    setEditing(false);
+  }
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 18px", borderTop: "1px solid #eeedf3" }}>
+      <div style={{ width: 88, flex: "none", fontSize: 16, fontWeight: 800 }}>{field.label}</div>
+      {editing ? (
+        <input
+          autoFocus
+          value={draft}
+          inputMode={field.inputMode}
+          onChange={(e) => setDraft(e.target.value)}
+          onBlur={commit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") commit();
+            if (e.key === "Escape") cancel();
+          }}
+          style={{ flex: 1, minWidth: 0, fontSize: 16, color: "#33323f", border: 0, borderBottom: "1.5px solid #4c31ea", outline: "none", background: "transparent", padding: "0 0 2px", fontFamily: "inherit" }}
+        />
+      ) : (
+        <div style={{ flex: 1, minWidth: 0, fontSize: 16, color: "#33323f", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</div>
+      )}
+      <div style={{ fontSize: 15, color: "#e8a53a", width: 14, textAlign: "center" }}>{field.warn}</div>
+      <div
+        className="dl-tap"
+        onClick={() => {
+          setDraft(value);
+          setEditing(true);
+        }}
+        style={{ fontSize: 15, color: "#5c5b6e", width: 18, textAlign: "center" }}
+      >
+        ✎
+      </div>
+    </div>
+  );
+}
+
+export default function ProfileScreen({ userName, refreshing, fieldValues, onFieldChange, onBack, onRefresh, onShare, onOpenVcard, onQuickLink }) {
   return (
     <div style={{ position: "absolute", inset: 0, zIndex: 40, display: "flex", flexDirection: "column", background: "#f4f4f7", animation: "dlPush .34s cubic-bezier(.22,1,.36,1) both" }}>
       <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden", paddingBottom: 40 }}>
@@ -57,18 +107,7 @@ export default function ProfileScreen({ userName, refreshing, onBack, onRefresh,
 
         <div style={{ margin: "22px 16px 0", background: "#fff", borderRadius: 14, boxShadow: "0 4px 14px rgba(27,27,45,.07)", overflow: "hidden", animation: "dlRise .45s ease .16s both" }}>
           {PROFILE_FIELDS.map((f) => (
-            <div key={f.key} style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 18px", borderTop: "1px solid #eeedf3" }}>
-              <div style={{ width: 88, flex: "none", fontSize: 16, fontWeight: 800 }}>{f.label}</div>
-              <div style={{ flex: 1, minWidth: 0, fontSize: 16, color: "#33323f", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{f.value}</div>
-              <div style={{ fontSize: 15, color: "#e8a53a", width: 14, textAlign: "center" }}>{f.warn}</div>
-              <div
-                className={f.editable ? "dl-tap" : undefined}
-                onClick={f.editable ? () => onFieldEdit(f) : undefined}
-                style={{ fontSize: 15, color: "#5c5b6e", width: 18, textAlign: "center" }}
-              >
-                {f.editable ? "✎" : ""}
-              </div>
-            </div>
+            <ProfileField key={f.key} field={f} value={fieldValues[f.key]} onChange={onFieldChange} />
           ))}
         </div>
 

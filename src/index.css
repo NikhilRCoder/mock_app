@@ -11,11 +11,34 @@ html, body {
 }
 
 #root {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px 16px;
+}
+
+.dl-phone {
+  position: relative;
+  overflow: hidden;
+  background: #f4f4f7;
+  font-family: 'Nunito Sans', system-ui, sans-serif;
+  color: #1b1b22;
+  width: 100%;
+  max-width: 480px;
+  height: 100dvh;
+  margin: 0 auto;
+}
+
+/* Edge-to-edge on an actual phone; a floating device preview on desktop. */
+@media (min-width: 620px) {
+  #root { padding: 32px 16px; }
+  .dl-phone {
+    width: 393px;
+    height: 852px;
+    max-height: calc(100dvh - 64px);
+    border-radius: 28px;
+    box-shadow: 0 30px 80px rgba(27, 27, 45, .28);
+  }
 }
 
 a { color: #4c31ea; text-decoration: none; }

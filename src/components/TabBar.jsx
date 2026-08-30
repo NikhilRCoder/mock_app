@@ -16,7 +16,7 @@ export default function TabBar({ activeTab, onTap }) {
         zIndex: 30,
         background: "#fff",
         borderTop: "1px solid #e7e6ee",
-        padding: "9px 0 22px",
+        padding: "9px 0 calc(22px + env(safe-area-inset-bottom))",
         display: "flex",
         alignItems: "flex-start",
       }}
