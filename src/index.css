@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap');
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #e9e8ee;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Nunito Sans', system-ui, sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+}
+
+a { color: #4c31ea; text-decoration: none; }
+a:hover { color: #3f27d9; }
+
+.dl-phone, .dl-phone * { scrollbar-width: none; }
+.dl-phone *::-webkit-scrollbar { width: 0; height: 0; }
+
+button, input { font-family: inherit; }
+
+@keyframes dlFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dlLogo { 0% { opacity: 0; transform: translateY(10px) scale(.94); } 100% { opacity: 1; transform: none; } }
+@keyframes dlTag { from { opacity: 0; transform: translateY(6px); } to { opacity: .72; transform: none; } }
+@keyframes dlPush { from { opacity: .4; transform: translateX(26px); } to { opacity: 1; transform: none; } }
+@keyframes dlTab { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes dlUp { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes dlRise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes dlPop { 0% { opacity: 0; transform: scale(.7); } 60% { transform: scale(1.08); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes dlSpin { to { transform: rotate(360deg); } }
+@keyframes dlDots { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
+@keyframes dlShine { 0% { background-position: -160px 0; } 100% { background-position: 260px 0; } }
+
+/* --- interactive press/hover states (mirrors the prototype's style-hover / style-active) --- */
+.dl-tap { cursor: pointer; }
+
+.dl-avatar { transition: transform .18s ease, background .18s ease; }
+.dl-avatar:hover { background: rgba(255, 255, 255, .28); }
+.dl-avatar:active { transform: scale(.93); }
+
+.dl-see-all { transition: transform .16s ease; }
+.dl-see-all:active { transform: scale(.95); }
+
+.dl-doc-card { transition: transform .18s cubic-bezier(.22, 1, .36, 1), box-shadow .18s ease; }
+.dl-doc-card:hover { box-shadow: 0 10px 26px rgba(27, 27, 45, .18); }
+.dl-doc-card:active { transform: scale(.97); }
+
+.dl-umang-btn { transition: transform .16s ease; }
+.dl-umang-btn:active { transform: scale(.95); }
+
+.dl-util-tile { transition: transform .16s ease, background .16s ease; }
+.dl-util-tile:active { transform: scale(.96); background: #e8e6f2; }
+
+.dl-search-row { transition: transform .16s ease; }
+.dl-search-row:active { transform: scale(.98); }
+
+.dl-issued-card { transition: transform .16s ease; }
+.dl-issued-card:active { transform: scale(.98); }
+
+.dl-menu-row { transition: background .14s ease; }
+.dl-menu-row:active { background: #f6f5fa; }
+
+.dl-tab-btn { transition: transform .16s ease; }
+.dl-tab-btn:active { transform: scale(.9); }
+
+.dl-umang-tab { transition: transform .16s ease; }
+.dl-umang-tab:active { transform: scale(.96); }
+
+.dl-back-btn { transition: transform .16s ease; }
+.dl-back-btn:active { transform: translateX(-3px); }
+
+.dl-vcard-btn { transition: transform .16s ease, background .16s ease; }
+.dl-vcard-btn:active { transform: scale(.96); background: #bfe1f7; }
+
+.dl-quicklink { transition: transform .16s ease, border-color .16s ease; }
+.dl-quicklink:active { transform: scale(.96); border-color: #4c31ea; }
+
+.dl-sheet-primary { transition: transform .16s ease; }
+.dl-sheet-primary:active { transform: scale(.97); }
