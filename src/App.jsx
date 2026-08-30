@@ -5,6 +5,7 @@ import SearchScreen from "./components/SearchScreen";
 import IssuedScreen from "./components/IssuedScreen";
 import MenuScreen from "./components/MenuScreen";
 import ProfileScreen from "./components/ProfileScreen";
+import DocumentScreen from "./components/DocumentScreen";
 import TabBar from "./components/TabBar";
 import BottomSheet from "./components/BottomSheet";
 import Toast from "./components/Toast";
@@ -12,10 +13,10 @@ import { loadProfile, saveProfile } from "./storage";
 import { EditModeContext } from "./editMode";
 
 export default function App() {
-  const [screen, setScreen] = useState("splash"); // "splash" | "tabs" | "profile"
+  const [screen, setScreen] = useState("splash"); // "splash" | "tabs" | "profile" | "document"
   const [tab, setTab] = useState("home"); // "home" | "search" | "issued" | "menu"
-  const [sheet, setSheet] = useState(null); // null | "doc" | "vcard"
-  const [sheetDoc, setSheetDoc] = useState(null);
+  const [viewingDoc, setViewingDoc] = useState(null);
+  const [vcardOpen, setVcardOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [toast, setToast] = useState("");
   const [refreshing, setRefreshing] = useState(false);
@@ -45,14 +46,13 @@ export default function App() {
   }
 
   function openDoc(doc) {
-    setSheet("doc");
-    setSheetDoc(doc);
+    setScreen("document");
+    setViewingDoc(doc);
   }
 
   function goTab(nextTab) {
     setScreen("tabs");
     setTab(nextTab);
-    setSheet(null);
   }
 
   function openProfile() {
@@ -96,6 +96,7 @@ export default function App() {
   const isSplash = screen === "splash";
   const onTabs = screen === "tabs";
   const isProfile = screen === "profile";
+  const isDocument = screen === "document";
   const indicatorColor = isSplash ? "#ffffff" : "#1b1b22";
 
   return (
@@ -131,14 +132,25 @@ export default function App() {
             onBack={backToTabs}
             onRefresh={refreshProfile}
             onShare={() => showToast("Share sheet would open")}
-            onOpenVcard={() => setSheet("vcard")}
+            onOpenVcard={() => setVcardOpen(true)}
             onQuickLink={(label) => showToast(label)}
+          />
+        )}
+
+        {isDocument && (
+          <DocumentScreen
+            doc={viewingDoc}
+            userName={profile.name}
+            onBack={backToTabs}
+            onGoHome={() => goTab("home")}
+            onGoIssued={() => goTab("issued")}
+            onShare={() => showToast("Share sheet would open")}
           />
         )}
 
         {onTabs && <TabBar activeTab={tab} onTap={goTab} />}
 
-        <BottomSheet sheet={sheet} sheetDoc={sheetDoc} onClose={() => setSheet(null)} />
+        <BottomSheet open={vcardOpen} onClose={() => setVcardOpen(false)} />
 
         <Toast message={toast} />
 
