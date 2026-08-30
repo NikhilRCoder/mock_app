@@ -32,6 +32,7 @@ export default function IssuedScreen({ onOpenDoc }) {
               alt={`${doc.title} issuer logo`}
               editSize={15}
               imgFit="contain"
+              stripWhiteBg
               style={{ width: 52, height: 52, borderRadius: 9 }}
               fallback={<Placeholder label={"issuer\nlogo"} style={{ width: "100%", height: "100%", borderRadius: 9, font: "8px/1.2 ui-monospace, Menlo, monospace" }} />}
             />

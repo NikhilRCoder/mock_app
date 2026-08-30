@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { clearLogo, getLogo, readFileAsDataURL, setLogo } from "./logoStorage";
+import { stripWhiteBackground } from "./imageProcessing";
 
 // Most slots only ever have one LogoSlot mounted at a time (single-screen
 // app), so each hook instance fetching independently was fine. AppIconManager
@@ -36,8 +37,9 @@ export function useLogo(key) {
   }, [key]);
 
   const upload = useCallback(
-    async (file) => {
-      const dataUrl = await readFileAsDataURL(file);
+    async (file, { stripWhiteBg = false } = {}) => {
+      let dataUrl = await readFileAsDataURL(file);
+      if (stripWhiteBg) dataUrl = await stripWhiteBackground(dataUrl);
       await setLogo(key, dataUrl);
       setUrl(dataUrl);
       broadcast(key, dataUrl);

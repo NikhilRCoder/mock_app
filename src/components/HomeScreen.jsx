@@ -16,6 +16,7 @@ export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpen
               alt="Issuing authority emblem"
               editSize={13}
               imgFit="contain"
+              stripWhiteBg
               style={{ width: 28, height: 32 }}
               fallback={<Placeholder label="emblem" style={{ width: "100%", height: "100%", borderRadius: 4, border: "1.4px dashed rgba(255,255,255,.6)", color: "rgba(255,255,255,.75)", font: "8px/1 ui-monospace, Menlo, monospace" }} />}
             />
@@ -25,6 +26,7 @@ export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpen
               alt="App logo"
               editSize={14}
               imgFit="contain"
+              stripWhiteBg
               style={{ width: 32, height: 32, borderRadius: 9 }}
               fallback={<AppMark size={32} rx="9" />}
             />
@@ -127,6 +129,7 @@ export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpen
                   editSize={16}
                   style={{ width: 64, height: 52, borderRadius: 8 }}
                   imgFit="contain"
+                  stripWhiteBg
                   fallback={<Placeholder label={"issuer\nlogo"} style={{ width: "100%", height: "100%", borderRadius: 8, color: "#8c8ba0" }} />}
                 />
                 <div style={{ flex: 1, textAlign: "center" }}>
@@ -194,6 +197,7 @@ export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpen
                   alt={label}
                   editSize={13}
                   imgFit="contain"
+                  stripWhiteBg
                   style={{ width: 34, height: 34, borderRadius: 7, background: "#e8e6f7", display: "flex", alignItems: "center", justifyContent: "center" }}
                   fallback={<UtilityIcon label={label} size={18} color="#4c31ea" />}
                 />

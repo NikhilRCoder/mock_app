@@ -16,6 +16,7 @@ function GenericDocContent({ doc, overrides, onFieldChange }) {
           alt={`${doc.title} issuer logo`}
           editSize={15}
           imgFit="contain"
+          stripWhiteBg
           style={{ width: 40, height: 40, borderRadius: 10 }}
           fallback={<AppMark size={40} rx={10} />}
         />
@@ -63,6 +64,7 @@ function GenericDocContent({ doc, overrides, onFieldChange }) {
                 alt="Signature"
                 editSize={18}
                 imgFit="contain"
+                stripWhiteBg
                 style={{ width: "100%", height: 110, borderRadius: 10 }}
                 fallback={<Placeholder label="signature" style={{ width: "100%", height: "100%", borderRadius: 10 }} />}
               />
@@ -89,6 +91,7 @@ function GovtCardContent({ doc, overrides, onFieldChange }) {
           alt="Issuing authority emblem"
           editSize={13}
           imgFit="contain"
+          stripWhiteBg
           style={{ width: 40, height: 48 }}
           fallback={<Placeholder label={"emblem"} style={{ width: "100%", height: "100%", borderRadius: 6 }} />}
         />
@@ -97,6 +100,7 @@ function GovtCardContent({ doc, overrides, onFieldChange }) {
           alt={doc.issuer}
           editSize={13}
           imgFit="contain"
+          stripWhiteBg
           style={{ flex: 1, height: 32 }}
           fallback={<div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#3a3948", letterSpacing: ".2px" }}>{doc.issuer}</div>}
         />
@@ -105,6 +109,7 @@ function GovtCardContent({ doc, overrides, onFieldChange }) {
           alt={`${doc.title} logo`}
           editSize={13}
           imgFit="contain"
+          stripWhiteBg
           style={{ width: 64, height: 44 }}
           fallback={<Placeholder label={"issuer\nlogo"} style={{ width: "100%", height: "100%", borderRadius: 6 }} />}
         />
@@ -151,6 +156,7 @@ function GovtCardContent({ doc, overrides, onFieldChange }) {
           alt="Powered by DigiLocker"
           editSize={16}
           imgFit="contain"
+          stripWhiteBg
           style={{ width: 150, height: 42, borderRadius: 8 }}
           fallback={<Placeholder label={"powered by\ndigilocker"} style={{ width: "100%", height: "100%", borderRadius: 8 }} />}
         />

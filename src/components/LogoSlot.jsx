@@ -17,6 +17,7 @@ export default function LogoSlot({
   className,
   onClick,
   editable = true,
+  stripWhiteBg = false,
 }) {
   const { url, upload, clear } = useLogo(slotKey);
   const { editMode } = useEditMode();
@@ -24,7 +25,7 @@ export default function LogoSlot({
 
   function handleChange(e) {
     const file = e.target.files?.[0];
-    if (file) upload(file);
+    if (file) upload(file, { stripWhiteBg });
     e.target.value = "";
   }
 

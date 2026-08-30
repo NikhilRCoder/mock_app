@@ -40,6 +40,7 @@ export default function SearchScreen({ query, onQueryChange, onOpenDoc }) {
               alt={`${r.title} issuer logo`}
               editSize={14}
               imgFit="contain"
+              stripWhiteBg
               style={{ width: 40, height: 40, borderRadius: 9 }}
               fallback={<Placeholder label="icon" style={{ width: "100%", height: "100%", border: "1.3px dashed #c9c8d6", borderRadius: 9, font: "8px/1 ui-monospace, Menlo, monospace" }} />}
             />
