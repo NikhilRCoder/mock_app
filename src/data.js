@@ -7,13 +7,15 @@ export const DOCS = [
     sub: "XXXX-XXXX-XXXX",
     issuer: "Unique Identification Authority of India (UIDAI)",
     hasPhoto: true,
+    layout: "govtCard",
     fields: [
       { label: "Name", value: "XXXXX XXXXX" },
-      { label: "Aadhaar Number", value: "XXXX XXXX XXXX" },
       { label: "DOB", value: "XX-XX-XXXX" },
       { label: "Gender", value: "XXXXXX" },
-      { label: "Address", value: "XXXX, XXXX, XXXX - XXXXXX" },
+      { label: "Aadhaar Number", value: "XXXX XXXX XXXX" },
     ],
+    address: "XXXX, XXXX,\nXXXX, XXXX - XXXXXX",
+    tagline: "मेरा आधार, मेरी पहचान",
   },
   {
     id: "x",
