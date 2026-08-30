@@ -1,12 +1,70 @@
 import Placeholder from "./Placeholder";
+import AppMark from "./AppMark";
+
+function DocBody({ doc }) {
+  if (!doc) return null;
+  return (
+    <div style={{ paddingTop: 4 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <AppMark size={40} rx={10} />
+        <div style={{ minWidth: 0 }}>
+          <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-.2px" }}>{doc.title}</div>
+          <div style={{ marginTop: 2, fontSize: 13, color: "#6c6b80" }}>{doc.issuer}</div>
+        </div>
+      </div>
+      <div style={{ height: 1, background: "#eeedf3", margin: "16px 0" }} />
+      <div>
+        {doc.fields.map((f) => (
+          <div key={f.label} style={{ display: "flex", gap: 10, padding: "9px 0", borderTop: "1px solid #f3f2f7" }}>
+            <div style={{ width: 132, flex: "none", fontSize: 14, fontWeight: 700, color: "#3a3948" }}>{f.label}</div>
+            <div style={{ flex: 1, minWidth: 0, fontSize: 14, color: "#5c5b6e" }}>: {f.value}</div>
+          </div>
+        ))}
+      </div>
+      {(doc.hasPhoto || doc.hasSignature) && (
+        <div style={{ display: "flex", gap: 14, marginTop: 18 }}>
+          {doc.hasPhoto && (
+            <div style={{ flex: 1 }}>
+              <Placeholder label="photo" style={{ height: 110, borderRadius: 10 }} />
+              <div style={{ marginTop: 6, textAlign: "center", fontSize: 12, color: "#8c8ba0" }}>Tap to Zoom</div>
+            </div>
+          )}
+          {doc.hasSignature && (
+            <div style={{ flex: 1 }}>
+              <Placeholder label="signature" style={{ height: 110, borderRadius: 10 }} />
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function VcardBody() {
+  return (
+    <div style={{ paddingTop: 4 }}>
+      <div style={{ fontSize: 21, fontWeight: 800, letterSpacing: "-.2px" }}>Your vCard</div>
+      <div style={{ marginTop: 6, fontSize: 14, color: "#6c6b80" }}>Share your verified identity by QR</div>
+      <Placeholder
+        label={"QR code\n(generated)"}
+        style={{
+          marginTop: 18,
+          height: 180,
+          borderRadius: 12,
+          font: "11px/1.4 ui-monospace, Menlo, monospace",
+          background: "linear-gradient(100deg,#f7f6fa 30%,#eeedf5 50%,#f7f6fa 70%)",
+          backgroundSize: "400px 100%",
+          animation: "dlShine 1.6s linear infinite",
+        }}
+      />
+    </div>
+  );
+}
 
 export default function BottomSheet({ sheet, sheetDoc, onClose }) {
   if (!sheet) return null;
 
   const isVcard = sheet === "vcard";
-  const title = isVcard ? "Your vCard" : sheetDoc?.title || "";
-  const sub = isVcard ? "Share your verified identity by QR" : sheetDoc?.issuer || "";
-  const placeholderText = isVcard ? "QR code\n(generated)" : "document preview\nPDF render";
   const primaryLabel = isVcard ? "Share vCard" : "Download PDF";
 
   return (
@@ -25,24 +83,20 @@ export default function BottomSheet({ sheet, sheetDoc, onClose }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        style={{ background: "#fff", borderRadius: "20px 20px 0 0", padding: "10px 20px calc(34px + env(safe-area-inset-bottom))", animation: "dlUp .34s cubic-bezier(.22,1,.36,1) both" }}
+        style={{
+          background: "#fff",
+          borderRadius: "20px 20px 0 0",
+          maxHeight: "86dvh",
+          display: "flex",
+          flexDirection: "column",
+          animation: "dlUp .34s cubic-bezier(.22,1,.36,1) both",
+        }}
       >
-        <div style={{ width: 42, height: 4, borderRadius: 2, background: "#dcdbe6", margin: "4px auto 18px" }} />
-        <div style={{ fontSize: 21, fontWeight: 800, letterSpacing: "-.2px" }}>{title}</div>
-        <div style={{ marginTop: 6, fontSize: 14, color: "#6c6b80" }}>{sub}</div>
-        <Placeholder
-          label={placeholderText}
-          style={{
-            marginTop: 18,
-            height: 180,
-            borderRadius: 12,
-            font: "11px/1.4 ui-monospace, Menlo, monospace",
-            background: "linear-gradient(100deg,#f7f6fa 30%,#eeedf5 50%,#f7f6fa 70%)",
-            backgroundSize: "400px 100%",
-            animation: "dlShine 1.6s linear infinite",
-          }}
-        />
-        <div style={{ marginTop: 20, display: "flex", gap: 10 }}>
+        <div style={{ flex: "none", width: 42, height: 4, borderRadius: 2, background: "#dcdbe6", margin: "10px auto 6px" }} />
+        <div style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: "0 20px 20px" }}>
+          {isVcard ? <VcardBody /> : <DocBody doc={sheetDoc} />}
+        </div>
+        <div style={{ flex: "none", display: "flex", gap: 10, padding: "14px 20px calc(20px + env(safe-area-inset-bottom))", borderTop: "1px solid #eeedf3" }}>
           <div
             className="dl-tap dl-sheet-primary"
             style={{ flex: 1, textAlign: "center", padding: 14, borderRadius: 26, background: "#4c31ea", color: "#fff", fontSize: 15, fontWeight: 800 }}

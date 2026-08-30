@@ -1,4 +1,4 @@
-import Placeholder from "./Placeholder";
+import AppMark from "./AppMark";
 
 export default function SplashScreen() {
   return (
@@ -26,18 +26,7 @@ export default function SplashScreen() {
           animation: "dlLogo .7s cubic-bezier(.22,1,.36,1) both",
         }}
       >
-        <Placeholder
-          label={"app logo\n112×112"}
-          style={{
-            width: 112,
-            height: 112,
-            borderRadius: 18,
-            border: "1.5px dashed rgba(255,255,255,.55)",
-            padding: 10,
-            color: "rgba(255,255,255,.75)",
-            font: "10px/1.4 ui-monospace, Menlo, monospace",
-          }}
-        />
+        <AppMark size={112} />
         <div style={{ fontSize: 46, fontWeight: 800, letterSpacing: "-.5px", lineHeight: 1 }}>DigiLocker</div>
       </div>
       <div style={{ display: "flex", gap: 7, marginBottom: 34 }}>

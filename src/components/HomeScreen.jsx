@@ -1,5 +1,6 @@
 import Placeholder from "./Placeholder";
 import UtilityIcon from "./UtilityIcon";
+import AppMark from "./AppMark";
 import { getInitials } from "../avatar";
 import { DOCS, UTILITY_LABELS } from "../data";
 
@@ -9,14 +10,7 @@ export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpen
       <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden", paddingBottom: 104 }}>
         <div style={{ position: "relative", background: "#4c31ea", padding: "calc(20px + env(safe-area-inset-top)) 22px 0", color: "#fff" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
-            <Placeholder
-              label="em"
-              style={{ width: 26, height: 30, border: "1.4px dashed rgba(255,255,255,.6)", borderRadius: 4, color: "rgba(255,255,255,.75)", font: "9px/1 ui-monospace, Menlo, monospace" }}
-            />
-            <Placeholder
-              label="dl"
-              style={{ width: 26, height: 30, border: "1.4px dashed rgba(255,255,255,.6)", borderRadius: 4, color: "rgba(255,255,255,.75)", font: "9px/1 ui-monospace, Menlo, monospace" }}
-            />
+            <AppMark size={32} rx="9" />
             <div style={{ fontSize: 23, fontWeight: 800, letterSpacing: "-.3px" }}>DigiLocker</div>
           </div>
 
