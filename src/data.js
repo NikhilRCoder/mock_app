@@ -1,3 +1,5 @@
+export const DEFAULT_USER_NAME = "Ashish Mahale";
+
 export const DOCS = [
   { id: "aadhaar", title: "Aadhaar Card", sub: "XXXX-XXXX-XXXX", issuer: "Unique Identification Authority of India (UIDAI)" },
   { id: "x", title: "Class X Marksheet", sub: "Roll No. XXXXXXX", issuer: "Ministry of Education" },

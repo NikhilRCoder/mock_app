@@ -1,10 +1,13 @@
-import { PROFILE_FIELDS } from "./data";
+import { DEFAULT_USER_NAME, PROFILE_FIELDS } from "./data";
 
-const KEY = "digilocker.profileFields.v1";
+const KEY = "digilocker.profile.v2";
 
-const DEFAULTS = Object.fromEntries(PROFILE_FIELDS.map((f) => [f.key, f.defaultValue]));
+const DEFAULTS = {
+  name: DEFAULT_USER_NAME,
+  ...Object.fromEntries(PROFILE_FIELDS.map((f) => [f.key, f.defaultValue])),
+};
 
-export function loadProfileFields() {
+export function loadProfile() {
   try {
     const raw = localStorage.getItem(KEY);
     if (!raw) return { ...DEFAULTS };
@@ -15,7 +18,7 @@ export function loadProfileFields() {
   }
 }
 
-export function saveProfileFields(values) {
+export function saveProfile(values) {
   try {
     localStorage.setItem(KEY, JSON.stringify(values));
   } catch {

@@ -1,11 +1,13 @@
 import Placeholder from "./Placeholder";
+import UtilityIcon from "./UtilityIcon";
+import { getInitials } from "../avatar";
 import { DOCS, UTILITY_LABELS } from "../data";
 
 export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpenDoc, onUtilTap }) {
   return (
     <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", animation: "dlTab .3s ease both" }}>
       <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden", paddingBottom: 104 }}>
-        <div style={{ position: "relative", background: "#4c31ea", padding: "56px 22px 0", color: "#fff" }}>
+        <div style={{ position: "relative", background: "#4c31ea", padding: "calc(20px + env(safe-area-inset-top)) 22px 0", color: "#fff" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
             <Placeholder
               label="em"
@@ -30,17 +32,17 @@ export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpen
                 height: 62,
                 borderRadius: "50%",
                 flex: "none",
-                background: "rgba(255,255,255,.16)",
-                border: "1.4px dashed rgba(255,255,255,.6)",
+                background: "rgba(255,255,255,.22)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                font: "9px/1.2 ui-monospace, Menlo, monospace",
-                color: "rgba(255,255,255,.85)",
-                textAlign: "center",
+                fontSize: 21,
+                fontWeight: 800,
+                letterSpacing: "-.02em",
+                color: "#fff",
               }}
             >
-              photo
+              {getInitials(userName)}
             </div>
           </div>
 
@@ -162,7 +164,9 @@ export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpen
                 onClick={() => onUtilTap(label)}
                 style={{ background: "#f5f4f9", borderRadius: 10, padding: "14px 12px 16px", minHeight: 104, display: "flex", flexDirection: "column", gap: 12 }}
               >
-                <Placeholder label="icon" style={{ width: 34, height: 34, border: "1.3px dashed #c3c2d2", borderRadius: 7, font: "8px/1 ui-monospace, Menlo, monospace" }} />
+                <div style={{ width: 34, height: 34, borderRadius: 7, background: "#e8e6f7", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <UtilityIcon label={label} size={18} color="#4c31ea" />
+                </div>
                 <div style={{ fontSize: 14, lineHeight: 1.25, color: "#3a3948" }}>{label}</div>
               </div>
             ))}

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import StatusBar from "./components/StatusBar";
 import SplashScreen from "./components/SplashScreen";
 import HomeScreen from "./components/HomeScreen";
 import SearchScreen from "./components/SearchScreen";
@@ -9,9 +8,7 @@ import ProfileScreen from "./components/ProfileScreen";
 import TabBar from "./components/TabBar";
 import BottomSheet from "./components/BottomSheet";
 import Toast from "./components/Toast";
-import { loadProfileFields, saveProfileFields } from "./storage";
-
-const USER_NAME = "Ashish Mahale";
+import { loadProfile, saveProfile } from "./storage";
 
 export default function App() {
   const [screen, setScreen] = useState("splash"); // "splash" | "tabs" | "profile"
@@ -21,7 +18,7 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [toast, setToast] = useState("");
   const [refreshing, setRefreshing] = useState(false);
-  const [fieldValues, setFieldValues] = useState(loadProfileFields);
+  const [profile, setProfile] = useState(loadProfile);
 
   const toastTimer = useRef(null);
   const refreshTimer = useRef(null);
@@ -76,10 +73,10 @@ export default function App() {
     setTab("home");
   }
 
-  function updateField(key, value) {
-    setFieldValues((prev) => {
+  function updateProfile(key, value) {
+    setProfile((prev) => {
       const next = { ...prev, [key]: value };
-      saveProfileFields(next);
+      saveProfile(next);
       return next;
     });
     showToast("Saved");
@@ -101,13 +98,11 @@ export default function App() {
 
   return (
     <div className="dl-phone">
-      <StatusBar color="#fff" />
-
       {isSplash && <SplashScreen />}
 
       {onTabs && tab === "home" && (
         <HomeScreen
-          userName={USER_NAME}
+          userName={profile.name}
           onOpenProfile={openProfile}
           onGoIssued={() => goTab("issued")}
           onOpenDoc={openDoc}
@@ -122,15 +117,14 @@ export default function App() {
       {onTabs && tab === "issued" && <IssuedScreen onOpenDoc={openDoc} />}
 
       {onTabs && tab === "menu" && (
-        <MenuScreen userName={USER_NAME} onOpenProfile={openProfile} menuRows={menuRows} />
+        <MenuScreen userName={profile.name} onOpenProfile={openProfile} menuRows={menuRows} />
       )}
 
       {isProfile && (
         <ProfileScreen
-          userName={USER_NAME}
+          profile={profile}
           refreshing={refreshing}
-          fieldValues={fieldValues}
-          onFieldChange={updateField}
+          onFieldChange={updateProfile}
           onBack={backToTabs}
           onRefresh={refreshProfile}
           onShare={() => showToast("Share sheet would open")}
@@ -150,7 +144,7 @@ export default function App() {
           position: "absolute",
           left: "50%",
           transform: "translateX(-50%)",
-          bottom: "calc(8px + env(safe-area-inset-bottom))",
+          bottom: "calc(2px + env(safe-area-inset-bottom))",
           zIndex: 90,
           width: 140,
           height: 5,

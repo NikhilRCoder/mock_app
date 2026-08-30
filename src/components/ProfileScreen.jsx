@@ -1,6 +1,53 @@
 import { useState } from "react";
-import Placeholder from "./Placeholder";
+import { getInitials } from "../avatar";
 import { PROFILE_FIELDS, QUICK_LINK_LABELS } from "../data";
+
+function EditableName({ value, onChange }) {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(value);
+
+  function commit() {
+    setEditing(false);
+    const next = draft.trim();
+    if (next && next !== value) onChange("name", next);
+    else setDraft(value);
+  }
+
+  function cancel() {
+    setDraft(value);
+    setEditing(false);
+  }
+
+  if (editing) {
+    return (
+      <input
+        autoFocus
+        value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={commit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") commit();
+          if (e.key === "Escape") cancel();
+        }}
+        style={{ marginTop: 14, fontSize: 25, fontWeight: 700, letterSpacing: "-.3px", textAlign: "center", border: 0, borderBottom: "1.5px solid #4c31ea", outline: "none", background: "transparent", fontFamily: "inherit", color: "#1b1b22", width: "100%" }}
+      />
+    );
+  }
+
+  return (
+    <div
+      className="dl-tap"
+      onClick={() => {
+        setDraft(value);
+        setEditing(true);
+      }}
+      style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 8, fontSize: 25, fontWeight: 700, letterSpacing: "-.3px", animation: "dlRise .4s ease .1s both" }}
+    >
+      {value}
+      <span style={{ fontSize: 15, color: "#5c5b6e" }}>✎</span>
+    </div>
+  );
+}
 
 function ProfileField({ field, value, onChange }) {
   const [editing, setEditing] = useState(false);
@@ -51,11 +98,11 @@ function ProfileField({ field, value, onChange }) {
   );
 }
 
-export default function ProfileScreen({ userName, refreshing, fieldValues, onFieldChange, onBack, onRefresh, onShare, onOpenVcard, onQuickLink }) {
+export default function ProfileScreen({ profile, refreshing, onFieldChange, onBack, onRefresh, onShare, onOpenVcard, onQuickLink }) {
   return (
     <div style={{ position: "absolute", inset: 0, zIndex: 40, display: "flex", flexDirection: "column", background: "#f4f4f7", animation: "dlPush .34s cubic-bezier(.22,1,.36,1) both" }}>
       <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden", paddingBottom: 40 }}>
-        <div style={{ position: "relative", background: "#4c31ea", padding: "56px 20px 0", color: "#fff", height: 250, boxSizing: "border-box" }}>
+        <div style={{ position: "relative", background: "#4c31ea", padding: "calc(20px + env(safe-area-inset-top)) 20px 0", color: "#fff", height: 250, boxSizing: "border-box" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
             <div className="dl-tap dl-back-btn" onClick={onBack} style={{ fontSize: 24, lineHeight: 1, width: 28 }}>←</div>
             <div style={{ flex: 1, textAlign: "center", fontSize: 21, fontWeight: 700, letterSpacing: "-.2px" }}>My Profile</div>
@@ -73,12 +120,25 @@ export default function ProfileScreen({ userName, refreshing, fieldValues, onFie
 
         <div style={{ marginTop: -118, position: "relative", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", padding: "0 20px" }}>
           <div style={{ width: 124, height: 124, borderRadius: "50%", background: "#fff", padding: 6, boxSizing: "border-box", animation: "dlPop .5s cubic-bezier(.22,1,.36,1) both" }}>
-            <Placeholder
-              label={"profile\nphoto"}
-              style={{ width: "100%", height: "100%", borderRadius: "50%", border: "1.4px dashed #c3c2d2", background: "#f0eff5", font: "10px/1.3 ui-monospace, Menlo, monospace" }}
-            />
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                borderRadius: "50%",
+                background: "linear-gradient(160deg,#5b3ff5 0%,#4c31ea 42%,#3f27d9 100%)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#fff",
+                fontSize: 40,
+                fontWeight: 800,
+                letterSpacing: "-.02em",
+              }}
+            >
+              {getInitials(profile.name)}
+            </div>
           </div>
-          <div style={{ marginTop: 14, fontSize: 25, fontWeight: 700, letterSpacing: "-.3px", animation: "dlRise .4s ease .1s both" }}>{userName}</div>
+          <EditableName value={profile.name} onChange={onFieldChange} />
           <div
             style={{
               marginTop: 10,
@@ -107,7 +167,7 @@ export default function ProfileScreen({ userName, refreshing, fieldValues, onFie
 
         <div style={{ margin: "22px 16px 0", background: "#fff", borderRadius: 14, boxShadow: "0 4px 14px rgba(27,27,45,.07)", overflow: "hidden", animation: "dlRise .45s ease .16s both" }}>
           {PROFILE_FIELDS.map((f) => (
-            <ProfileField key={f.key} field={f} value={fieldValues[f.key]} onChange={onFieldChange} />
+            <ProfileField key={f.key} field={f} value={profile[f.key]} onChange={onFieldChange} />
           ))}
         </div>
 

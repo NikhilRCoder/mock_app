@@ -4,7 +4,7 @@ import { DOCS } from "../data";
 export default function IssuedScreen({ onOpenDoc }) {
   return (
     <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", background: "#f4f4f7", animation: "dlTab .3s ease both" }}>
-      <div style={{ background: "#4c31ea", padding: "56px 20px 22px", color: "#fff" }}>
+      <div style={{ background: "#4c31ea", padding: "calc(20px + env(safe-area-inset-top)) 20px 22px", color: "#fff" }}>
         <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-.3px" }}>Issued Documents</div>
         <div style={{ marginTop: 6, fontSize: 14, opacity: .85 }}>{DOCS.length} documents in your locker</div>
       </div>

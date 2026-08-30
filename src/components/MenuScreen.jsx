@@ -1,14 +1,15 @@
-import Placeholder from "./Placeholder";
+import { getInitials } from "../avatar";
 
 export default function MenuScreen({ userName, onOpenProfile, menuRows }) {
   return (
     <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", background: "#f4f4f7", animation: "dlTab .3s ease both" }}>
-      <div style={{ background: "#4c31ea", padding: "56px 20px 22px", color: "#fff", display: "flex", alignItems: "center", gap: 14 }}>
-        <div className="dl-tap" onClick={onOpenProfile} style={{ width: 52, height: 52, flex: "none" }}>
-          <Placeholder
-            label="photo"
-            style={{ width: "100%", height: "100%", borderRadius: "50%", border: "1.4px dashed rgba(255,255,255,.6)", background: "rgba(255,255,255,.16)", color: "rgba(255,255,255,.85)", font: "9px/1 ui-monospace, Menlo, monospace" }}
-          />
+      <div style={{ background: "#4c31ea", padding: "calc(20px + env(safe-area-inset-top)) 20px 22px", color: "#fff", display: "flex", alignItems: "center", gap: 14 }}>
+        <div
+          className="dl-tap"
+          onClick={onOpenProfile}
+          style={{ width: 52, height: 52, flex: "none", borderRadius: "50%", background: "rgba(255,255,255,.22)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 800, letterSpacing: "-.02em" }}
+        >
+          {getInitials(userName)}
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-.2px" }}>{userName}</div>

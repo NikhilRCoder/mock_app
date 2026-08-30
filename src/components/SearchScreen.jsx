@@ -10,7 +10,7 @@ export default function SearchScreen({ query, onQueryChange, onOpenDoc }) {
 
   return (
     <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", background: "#f4f4f7", animation: "dlTab .3s ease both" }}>
-      <div style={{ background: "#4c31ea", padding: "56px 20px 20px", color: "#fff" }}>
+      <div style={{ background: "#4c31ea", padding: "calc(20px + env(safe-area-inset-top)) 20px 20px", color: "#fff" }}>
         <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-.3px" }}>Search</div>
         <div style={{ marginTop: 16, display: "flex", alignItems: "center", gap: 10, background: "#fff", borderRadius: 14, padding: "0 14px", height: 48 }}>
           <span style={{ fontSize: 17, color: "#8c8ba0" }}>⌕</span>
