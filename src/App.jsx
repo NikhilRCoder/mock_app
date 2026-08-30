@@ -10,6 +10,7 @@ import TabBar from "./components/TabBar";
 import BottomSheet from "./components/BottomSheet";
 import Toast from "./components/Toast";
 import { loadProfile, saveProfile } from "./storage";
+import { loadDocFields, saveDocFields } from "./docStorage";
 import { EditModeContext } from "./editMode";
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
   const [toast, setToast] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const [profile, setProfile] = useState(loadProfile);
+  const [docFields, setDocFields] = useState(loadDocFields);
   const [editMode, setEditMode] = useState(false);
 
   const toastTimer = useRef(null);
@@ -84,6 +86,15 @@ export default function App() {
     showToast("Saved");
   }
 
+  function updateDocField(docId, label, value) {
+    setDocFields((prev) => {
+      const next = { ...prev, [`${docId}:${label}`]: value };
+      saveDocFields(next);
+      return next;
+    });
+    showToast("Saved");
+  }
+
   const menuRows = [
     { label: "My Profile", color: "#1b1b22", onTap: openProfile },
     { label: "My Account", color: "#1b1b22", onTap: () => showToast("My Account") },
@@ -141,6 +152,8 @@ export default function App() {
           <DocumentScreen
             doc={viewingDoc}
             userName={profile.name}
+            docFields={docFields}
+            onDocFieldChange={updateDocField}
             onBack={backToTabs}
             onGoHome={() => goTab("home")}
             onGoIssued={() => goTab("issued")}

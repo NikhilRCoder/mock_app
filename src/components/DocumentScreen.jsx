@@ -1,9 +1,13 @@
 import Placeholder from "./Placeholder";
 import AppMark from "./AppMark";
 import LogoSlot from "./LogoSlot";
+import EditableValue from "./EditableValue";
 import { getInitials } from "../avatar";
+import { useEditMode } from "../editMode";
+import { getFieldValue } from "../docStorage";
 
-function GenericDocContent({ doc }) {
+function GenericDocContent({ doc, overrides, onFieldChange }) {
+  const { editMode } = useEditMode();
   return (
     <div>
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -25,7 +29,15 @@ function GenericDocContent({ doc }) {
         {doc.fields.map((f) => (
           <div key={f.label} style={{ display: "flex", gap: 10, padding: "9px 0", borderTop: "1px solid #f3f2f7" }}>
             <div style={{ width: 132, flex: "none", fontSize: 14, fontWeight: 700, color: "#3a3948" }}>{f.label}</div>
-            <div style={{ flex: 1, minWidth: 0, fontSize: 14, color: "#5c5b6e" }}>: {f.value}</div>
+            <div style={{ flex: 1, minWidth: 0, fontSize: 14, color: "#5c5b6e" }}>
+              :{" "}
+              <EditableValue
+                key={`${f.label}-${editMode}`}
+                value={getFieldValue(overrides, doc.id, f.label, f.value)}
+                onCommit={(v) => onFieldChange(doc.id, f.label, v)}
+                containerStyle={{ verticalAlign: "top" }}
+              />
+            </div>
           </div>
         ))}
       </div>
@@ -67,7 +79,8 @@ function GenericDocContent({ doc }) {
 // + QR code. Every branded image here (emblem, authority banner, issuer
 // logo, "powered by" badge, QR) is a LogoSlot with a neutral fallback —
 // nothing here reproduces a real government or service mark.
-function GovtCardContent({ doc }) {
+function GovtCardContent({ doc, overrides, onFieldChange }) {
+  const { editMode } = useEditMode();
   return (
     <div>
       <div style={{ display: "flex", alignItems: "center", gap: 10, paddingBottom: 14, borderBottom: "1px solid #eeedf3" }}>
@@ -108,7 +121,12 @@ function GovtCardContent({ doc }) {
         />
         <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "center", gap: 10 }}>
           {doc.fields.map((f) => (
-            <div key={f.label} style={{ fontSize: 15, color: "#1b1b22" }}>{f.value}</div>
+            <EditableValue
+              key={`${f.label}-${editMode}`}
+              value={getFieldValue(overrides, doc.id, f.label, f.value)}
+              onCommit={(v) => onFieldChange(doc.id, f.label, v)}
+              displayStyle={{ fontSize: 15, color: "#1b1b22" }}
+            />
           ))}
         </div>
       </div>
@@ -116,7 +134,14 @@ function GovtCardContent({ doc }) {
       {doc.address && (
         <div style={{ padding: "16px 0", borderBottom: "1px solid #eeedf3" }}>
           <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 8 }}>Address:</div>
-          <div style={{ fontSize: 14, color: "#5c5b6e", lineHeight: 1.55, whiteSpace: "pre-line" }}>{doc.address}</div>
+          <EditableValue
+            key={`address-${editMode}`}
+            value={getFieldValue(overrides, doc.id, "address", doc.address)}
+            onCommit={(v) => onFieldChange(doc.id, "address", v)}
+            multiline
+            displayStyle={{ fontSize: 14, color: "#5c5b6e", lineHeight: 1.55 }}
+            containerStyle={{ display: "flex", width: "100%" }}
+          />
         </div>
       )}
 
@@ -164,7 +189,7 @@ function GovtCardContent({ doc }) {
   );
 }
 
-export default function DocumentScreen({ doc, userName, onBack, onGoHome, onShare, onGoIssued }) {
+export default function DocumentScreen({ doc, userName, docFields, onDocFieldChange, onBack, onGoHome, onShare, onGoIssued }) {
   if (!doc) return null;
 
   return (
@@ -191,7 +216,11 @@ export default function DocumentScreen({ doc, userName, onBack, onGoHome, onShar
 
       <div style={{ flex: 1, overflowY: "auto", padding: "10px 20px 24px" }}>
         <div style={{ background: "#fff", borderRadius: 16, boxShadow: "0 4px 20px rgba(27,27,45,.1)", border: "1px solid #f0eff5", padding: 20 }}>
-          {doc.layout === "govtCard" ? <GovtCardContent doc={doc} /> : <GenericDocContent doc={doc} />}
+          {doc.layout === "govtCard" ? (
+            <GovtCardContent doc={doc} overrides={docFields} onFieldChange={onDocFieldChange} />
+          ) : (
+            <GenericDocContent doc={doc} overrides={docFields} onFieldChange={onDocFieldChange} />
+          )}
         </div>
       </div>
 
