@@ -1,4 +1,5 @@
 import AppMark from "./AppMark";
+import LogoSlot from "./LogoSlot";
 
 export default function SplashScreen() {
   return (
@@ -26,7 +27,13 @@ export default function SplashScreen() {
           animation: "dlLogo .7s cubic-bezier(.22,1,.36,1) both",
         }}
       >
-        <AppMark size={112} />
+        <LogoSlot
+          slotKey="appMark"
+          alt="App logo"
+          editable={false}
+          style={{ width: 112, height: 112, borderRadius: 18 }}
+          fallback={<AppMark size={112} />}
+        />
         <div style={{ fontSize: 46, fontWeight: 800, letterSpacing: "-.5px", lineHeight: 1 }}>DigiLocker</div>
       </div>
       <div style={{ display: "flex", gap: 7, marginBottom: 34 }}>

@@ -1,12 +1,20 @@
 import Placeholder from "./Placeholder";
 import AppMark from "./AppMark";
+import LogoSlot from "./LogoSlot";
 
 function DocBody({ doc }) {
   if (!doc) return null;
   return (
     <div style={{ paddingTop: 4 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-        <AppMark size={40} rx={10} />
+        <LogoSlot
+          slotKey={`issuerLogo:${doc.id}`}
+          alt={`${doc.title} issuer logo`}
+          editSize={15}
+          imgFit="contain"
+          style={{ width: 40, height: 40, borderRadius: 10 }}
+          fallback={<AppMark size={40} rx={10} />}
+        />
         <div style={{ minWidth: 0 }}>
           <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-.2px" }}>{doc.title}</div>
           <div style={{ marginTop: 2, fontSize: 13, color: "#6c6b80" }}>{doc.issuer}</div>
@@ -25,13 +33,27 @@ function DocBody({ doc }) {
         <div style={{ display: "flex", gap: 14, marginTop: 18 }}>
           {doc.hasPhoto && (
             <div style={{ flex: 1 }}>
-              <Placeholder label="photo" style={{ height: 110, borderRadius: 10 }} />
+              <LogoSlot
+                slotKey="profilePhoto"
+                alt="Photo"
+                editSize={18}
+                imgFit="cover"
+                style={{ width: "100%", height: 110, borderRadius: 10 }}
+                fallback={<Placeholder label="photo" style={{ width: "100%", height: "100%", borderRadius: 10 }} />}
+              />
               <div style={{ marginTop: 6, textAlign: "center", fontSize: 12, color: "#8c8ba0" }}>Tap to Zoom</div>
             </div>
           )}
           {doc.hasSignature && (
             <div style={{ flex: 1 }}>
-              <Placeholder label="signature" style={{ height: 110, borderRadius: 10 }} />
+              <LogoSlot
+                slotKey="signature"
+                alt="Signature"
+                editSize={18}
+                imgFit="contain"
+                style={{ width: "100%", height: 110, borderRadius: 10 }}
+                fallback={<Placeholder label="signature" style={{ width: "100%", height: "100%", borderRadius: 10 }} />}
+              />
             </div>
           )}
         </div>

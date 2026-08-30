@@ -1,16 +1,19 @@
 import { getInitials } from "../avatar";
+import LogoSlot from "./LogoSlot";
 
 export default function MenuScreen({ userName, onOpenProfile, menuRows }) {
   return (
     <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", background: "#f4f4f7", animation: "dlTab .3s ease both" }}>
       <div style={{ background: "#4c31ea", padding: "calc(20px + env(safe-area-inset-top)) 20px 22px", color: "#fff", display: "flex", alignItems: "center", gap: 14 }}>
-        <div
+        <LogoSlot
+          slotKey="profilePhoto"
+          alt="Profile photo"
           className="dl-tap"
           onClick={onOpenProfile}
-          style={{ width: 52, height: 52, flex: "none", borderRadius: "50%", background: "rgba(255,255,255,.22)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 800, letterSpacing: "-.02em" }}
-        >
-          {getInitials(userName)}
-        </div>
+          editSize={16}
+          style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(255,255,255,.22)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 800, letterSpacing: "-.02em" }}
+          fallback={getInitials(userName)}
+        />
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-.2px" }}>{userName}</div>
           <div className="dl-tap" onClick={onOpenProfile} style={{ marginTop: 3, fontSize: 14, opacity: .85 }}>View my profile ›</div>

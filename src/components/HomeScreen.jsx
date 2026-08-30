@@ -1,6 +1,7 @@
 import Placeholder from "./Placeholder";
 import UtilityIcon from "./UtilityIcon";
 import AppMark from "./AppMark";
+import LogoSlot from "./LogoSlot";
 import { getInitials } from "../avatar";
 import { DOCS, UTILITY_LABELS } from "../data";
 
@@ -10,7 +11,13 @@ export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpen
       <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden", paddingBottom: 104 }}>
         <div style={{ position: "relative", background: "#4c31ea", padding: "calc(20px + env(safe-area-inset-top)) 22px 0", color: "#fff" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
-            <AppMark size={32} rx="9" />
+            <LogoSlot
+              slotKey="appMark"
+              alt="App logo"
+              editSize={14}
+              style={{ width: 32, height: 32, borderRadius: 9 }}
+              fallback={<AppMark size={32} rx="9" />}
+            />
             <div style={{ fontSize: 23, fontWeight: 800, letterSpacing: "-.3px" }}>DigiLocker</div>
           </div>
 
@@ -18,14 +25,16 @@ export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpen
             <div style={{ fontSize: 30, fontWeight: 800, lineHeight: 1.15, letterSpacing: "-.5px", maxWidth: 250, textWrap: "pretty" }}>
               Welcome,<br />{userName}
             </div>
-            <div
+            <LogoSlot
+              slotKey="profilePhoto"
+              alt="Profile photo"
               className="dl-tap dl-avatar"
               onClick={onOpenProfile}
+              editSize={18}
               style={{
                 width: 62,
                 height: 62,
                 borderRadius: "50%",
-                flex: "none",
                 background: "rgba(255,255,255,.22)",
                 display: "flex",
                 alignItems: "center",
@@ -35,9 +44,8 @@ export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpen
                 letterSpacing: "-.02em",
                 color: "#fff",
               }}
-            >
-              {getInitials(userName)}
-            </div>
+              fallback={getInitials(userName)}
+            />
           </div>
 
           <div style={{ marginTop: 20, fontSize: 15, lineHeight: 1.45, color: "rgba(255,255,255,.92)", textWrap: "pretty" }}>
@@ -103,9 +111,13 @@ export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpen
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                <Placeholder
-                  label={"issuer\nlogo"}
-                  style={{ width: 64, height: 52, flex: "none", borderRadius: 8, color: "#8c8ba0" }}
+                <LogoSlot
+                  slotKey={`issuerLogo:${doc.id}`}
+                  alt={`${doc.title} issuer logo`}
+                  editSize={16}
+                  style={{ width: 64, height: 52, borderRadius: 8 }}
+                  imgFit="contain"
+                  fallback={<Placeholder label={"issuer\nlogo"} style={{ width: "100%", height: "100%", borderRadius: 8, color: "#8c8ba0" }} />}
                 />
                 <div style={{ flex: 1, textAlign: "center" }}>
                   <div style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-.2px" }}>{doc.title}</div>
@@ -142,9 +154,18 @@ export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpen
               Access UMANG
             </div>
           </div>
-          <Placeholder
-            label={"UMANG\nartwork"}
-            style={{ width: 96, height: 112, flex: "none", borderRadius: 10, font: "9px/1.3 ui-monospace, Menlo, monospace" }}
+          <LogoSlot
+            slotKey="umangArtwork"
+            alt="UMANG artwork"
+            editSize={18}
+            style={{ width: 96, height: 112, borderRadius: 10 }}
+            imgFit="cover"
+            fallback={
+              <Placeholder
+                label={"UMANG\nartwork"}
+                style={{ width: "100%", height: "100%", borderRadius: 10, font: "9px/1.3 ui-monospace, Menlo, monospace" }}
+              />
+            }
           />
         </div>
 
@@ -158,9 +179,14 @@ export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpen
                 onClick={() => onUtilTap(label)}
                 style={{ background: "#f5f4f9", borderRadius: 10, padding: "14px 12px 16px", minHeight: 104, display: "flex", flexDirection: "column", gap: 12 }}
               >
-                <div style={{ width: 34, height: 34, borderRadius: 7, background: "#e8e6f7", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <UtilityIcon label={label} size={18} color="#4c31ea" />
-                </div>
+                <LogoSlot
+                  slotKey={`utilityIcon:${label}`}
+                  alt={label}
+                  editSize={13}
+                  imgFit="contain"
+                  style={{ width: 34, height: 34, borderRadius: 7, background: "#e8e6f7", display: "flex", alignItems: "center", justifyContent: "center" }}
+                  fallback={<UtilityIcon label={label} size={18} color="#4c31ea" />}
+                />
                 <div style={{ fontSize: 14, lineHeight: 1.25, color: "#3a3948" }}>{label}</div>
               </div>
             ))}

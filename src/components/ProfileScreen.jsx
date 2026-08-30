@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getInitials } from "../avatar";
+import LogoSlot from "./LogoSlot";
 import { PROFILE_FIELDS, QUICK_LINK_LABELS } from "../data";
 
 function EditableName({ value, onChange }) {
@@ -120,7 +121,10 @@ export default function ProfileScreen({ profile, refreshing, onFieldChange, onBa
 
         <div style={{ marginTop: -118, position: "relative", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", padding: "0 20px" }}>
           <div style={{ width: 124, height: 124, borderRadius: "50%", background: "#fff", padding: 6, boxSizing: "border-box", animation: "dlPop .5s cubic-bezier(.22,1,.36,1) both" }}>
-            <div
+            <LogoSlot
+              slotKey="profilePhoto"
+              alt="Profile photo"
+              editSize={26}
               style={{
                 width: "100%",
                 height: "100%",
@@ -134,9 +138,8 @@ export default function ProfileScreen({ profile, refreshing, onFieldChange, onBa
                 fontWeight: 800,
                 letterSpacing: "-.02em",
               }}
-            >
-              {getInitials(profile.name)}
-            </div>
+              fallback={getInitials(profile.name)}
+            />
           </div>
           <EditableName value={profile.name} onChange={onFieldChange} />
           <div

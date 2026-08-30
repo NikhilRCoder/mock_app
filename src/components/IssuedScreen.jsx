@@ -1,4 +1,5 @@
 import Placeholder from "./Placeholder";
+import LogoSlot from "./LogoSlot";
 import { DOCS } from "../data";
 
 export default function IssuedScreen({ onOpenDoc }) {
@@ -26,7 +27,14 @@ export default function IssuedScreen({ onOpenDoc }) {
               animation: `dlRise .4s ease ${i * 0.04}s both`,
             }}
           >
-            <Placeholder label={"issuer\nlogo"} style={{ width: 52, height: 52, flex: "none", borderRadius: 9, font: "8px/1.2 ui-monospace, Menlo, monospace" }} />
+            <LogoSlot
+              slotKey={`issuerLogo:${doc.id}`}
+              alt={`${doc.title} issuer logo`}
+              editSize={15}
+              imgFit="contain"
+              style={{ width: 52, height: 52, borderRadius: 9 }}
+              fallback={<Placeholder label={"issuer\nlogo"} style={{ width: "100%", height: "100%", borderRadius: 9, font: "8px/1.2 ui-monospace, Menlo, monospace" }} />}
+            />
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 17, fontWeight: 800 }}>{doc.title}</div>
               <div style={{ marginTop: 4, fontSize: 14, color: "#6c6b80", letterSpacing: ".3px" }}>{doc.sub}</div>

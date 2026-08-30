@@ -1,4 +1,5 @@
 import Placeholder from "./Placeholder";
+import LogoSlot from "./LogoSlot";
 import { CATALOG } from "../data";
 
 export default function SearchScreen({ query, onQueryChange, onOpenDoc }) {
@@ -34,7 +35,14 @@ export default function SearchScreen({ query, onQueryChange, onOpenDoc }) {
             onClick={() => onOpenDoc(r)}
             style={{ background: "#fff", borderRadius: 12, padding: "14px 16px", marginBottom: 10, display: "flex", alignItems: "center", gap: 14 }}
           >
-            <Placeholder label="icon" style={{ width: 40, height: 40, flex: "none", border: "1.3px dashed #c9c8d6", borderRadius: 9, font: "8px/1 ui-monospace, Menlo, monospace" }} />
+            <LogoSlot
+              slotKey={`issuerLogo:${r.id}`}
+              alt={`${r.title} issuer logo`}
+              editSize={14}
+              imgFit="contain"
+              style={{ width: 40, height: 40, borderRadius: 9 }}
+              fallback={<Placeholder label="icon" style={{ width: "100%", height: "100%", border: "1.3px dashed #c9c8d6", borderRadius: 9, font: "8px/1 ui-monospace, Menlo, monospace" }} />}
+            />
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 16, fontWeight: 700 }}>{r.title}</div>
               <div style={{ marginTop: 3, fontSize: 13, color: "#6c6b80", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.issuer}</div>
