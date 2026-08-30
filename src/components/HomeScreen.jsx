@@ -10,7 +10,16 @@ export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpen
     <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", animation: "dlTab .3s ease both" }}>
       <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden", paddingBottom: 104 }}>
         <div style={{ position: "relative", background: "#4c31ea", padding: "calc(20px + env(safe-area-inset-top)) 22px 0", color: "#fff" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <LogoSlot
+              slotKey="govtEmblem"
+              alt="Issuing authority emblem"
+              editSize={13}
+              imgFit="contain"
+              style={{ width: 28, height: 32 }}
+              fallback={<Placeholder label="emblem" style={{ width: "100%", height: "100%", borderRadius: 4, border: "1.4px dashed rgba(255,255,255,.6)", color: "rgba(255,255,255,.75)", font: "8px/1 ui-monospace, Menlo, monospace" }} />}
+            />
+            <div style={{ width: 1, height: 26, background: "rgba(255,255,255,.4)", flex: "none" }} />
             <LogoSlot
               slotKey="appMark"
               alt="App logo"
