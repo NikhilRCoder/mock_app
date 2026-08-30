@@ -9,6 +9,7 @@ import TabBar from "./components/TabBar";
 import BottomSheet from "./components/BottomSheet";
 import Toast from "./components/Toast";
 import { loadProfile, saveProfile } from "./storage";
+import { EditModeContext } from "./editMode";
 
 export default function App() {
   const [screen, setScreen] = useState("splash"); // "splash" | "tabs" | "profile"
@@ -19,6 +20,7 @@ export default function App() {
   const [toast, setToast] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const [profile, setProfile] = useState(loadProfile);
+  const [editMode, setEditMode] = useState(false);
 
   const toastTimer = useRef(null);
   const refreshTimer = useRef(null);
@@ -97,62 +99,91 @@ export default function App() {
   const indicatorColor = isSplash ? "#ffffff" : "#1b1b22";
 
   return (
-    <div className="dl-phone">
-      {isSplash && <SplashScreen />}
+    <EditModeContext.Provider value={{ editMode, setEditMode }}>
+      <div className="dl-phone">
+        {!isSplash && (
+          <button
+            type="button"
+            onClick={() => setEditMode((e) => !e)}
+            style={{
+              position: "absolute",
+              top: "calc(10px + env(safe-area-inset-top))",
+              right: 14,
+              zIndex: 95,
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              padding: "7px 13px",
+              borderRadius: 20,
+              border: "none",
+              background: editMode ? "#22a25a" : "rgba(27,27,45,.55)",
+              color: "#fff",
+              fontSize: 12,
+              fontWeight: 700,
+              cursor: "pointer",
+              backdropFilter: "blur(4px)",
+            }}
+          >
+            {editMode ? "✓ Done Editing" : "✎ Edit"}
+          </button>
+        )}
 
-      {onTabs && tab === "home" && (
-        <HomeScreen
-          userName={profile.name}
-          onOpenProfile={openProfile}
-          onGoIssued={() => goTab("issued")}
-          onOpenDoc={openDoc}
-          onUtilTap={(label) => showToast(`${label} — not in this prototype`)}
+        {isSplash && <SplashScreen />}
+
+        {onTabs && tab === "home" && (
+          <HomeScreen
+            userName={profile.name}
+            onOpenProfile={openProfile}
+            onGoIssued={() => goTab("issued")}
+            onOpenDoc={openDoc}
+            onUtilTap={(label) => showToast(`${label} — not in this prototype`)}
+          />
+        )}
+
+        {onTabs && tab === "search" && (
+          <SearchScreen query={query} onQueryChange={setQuery} onOpenDoc={openDoc} />
+        )}
+
+        {onTabs && tab === "issued" && <IssuedScreen onOpenDoc={openDoc} />}
+
+        {onTabs && tab === "menu" && (
+          <MenuScreen userName={profile.name} onOpenProfile={openProfile} menuRows={menuRows} />
+        )}
+
+        {isProfile && (
+          <ProfileScreen
+            profile={profile}
+            refreshing={refreshing}
+            onFieldChange={updateProfile}
+            onBack={backToTabs}
+            onRefresh={refreshProfile}
+            onShare={() => showToast("Share sheet would open")}
+            onOpenVcard={() => setSheet("vcard")}
+            onQuickLink={(label) => showToast(label)}
+          />
+        )}
+
+        {onTabs && <TabBar activeTab={tab} onTap={goTab} />}
+
+        <BottomSheet sheet={sheet} sheetDoc={sheetDoc} onClose={() => setSheet(null)} />
+
+        <Toast message={toast} />
+
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
+            bottom: "calc(2px + env(safe-area-inset-bottom))",
+            zIndex: 90,
+            width: 140,
+            height: 5,
+            borderRadius: 3,
+            background: indicatorColor,
+            opacity: .85,
+          }}
         />
-      )}
-
-      {onTabs && tab === "search" && (
-        <SearchScreen query={query} onQueryChange={setQuery} onOpenDoc={openDoc} />
-      )}
-
-      {onTabs && tab === "issued" && <IssuedScreen onOpenDoc={openDoc} />}
-
-      {onTabs && tab === "menu" && (
-        <MenuScreen userName={profile.name} onOpenProfile={openProfile} menuRows={menuRows} />
-      )}
-
-      {isProfile && (
-        <ProfileScreen
-          profile={profile}
-          refreshing={refreshing}
-          onFieldChange={updateProfile}
-          onBack={backToTabs}
-          onRefresh={refreshProfile}
-          onShare={() => showToast("Share sheet would open")}
-          onOpenVcard={() => setSheet("vcard")}
-          onQuickLink={(label) => showToast(label)}
-        />
-      )}
-
-      {onTabs && <TabBar activeTab={tab} onTap={goTab} />}
-
-      <BottomSheet sheet={sheet} sheetDoc={sheetDoc} onClose={() => setSheet(null)} />
-
-      <Toast message={toast} />
-
-      <div
-        style={{
-          position: "absolute",
-          left: "50%",
-          transform: "translateX(-50%)",
-          bottom: "calc(2px + env(safe-area-inset-bottom))",
-          zIndex: 90,
-          width: 140,
-          height: 5,
-          borderRadius: 3,
-          background: indicatorColor,
-          opacity: .85,
-        }}
-      />
-    </div>
+      </div>
+    </EditModeContext.Provider>
   );
 }

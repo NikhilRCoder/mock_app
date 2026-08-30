@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { useLogo } from "../useLogo";
+import { useEditMode } from "../editMode";
 
 // A placement that can show a locally-uploaded image (stored in IndexedDB,
 // never leaves the browser) or fall back to the existing placeholder/mark.
@@ -18,6 +19,7 @@ export default function LogoSlot({
   editable = true,
 }) {
   const { url, upload, clear } = useLogo(slotKey);
+  const { editMode } = useEditMode();
   const inputRef = useRef(null);
 
   function handleChange(e) {
@@ -42,7 +44,7 @@ export default function LogoSlot({
         fallback
       )}
 
-      {editable && (
+      {editable && editMode && (
         <>
           <input ref={inputRef} type="file" accept="image/*" onChange={handleChange} style={{ display: "none" }} />
           <button

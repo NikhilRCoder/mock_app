@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { getInitials } from "../avatar";
 import LogoSlot from "./LogoSlot";
+import { useEditMode } from "../editMode";
 import { PROFILE_FIELDS, QUICK_LINK_LABELS } from "../data";
 
+// Remounted (via `key`) whenever edit mode toggles, so an in-progress edit
+// can't be left stranded once the pencils disappear.
 function EditableName({ value, onChange }) {
+  const { editMode } = useEditMode();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value);
 
@@ -37,20 +41,26 @@ function EditableName({ value, onChange }) {
 
   return (
     <div
-      className="dl-tap"
-      onClick={() => {
-        setDraft(value);
-        setEditing(true);
-      }}
+      className={editMode ? "dl-tap" : undefined}
+      onClick={
+        editMode
+          ? () => {
+              setDraft(value);
+              setEditing(true);
+            }
+          : undefined
+      }
       style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 8, fontSize: 25, fontWeight: 700, letterSpacing: "-.3px", animation: "dlRise .4s ease .1s both" }}
     >
       {value}
-      <span style={{ fontSize: 15, color: "#5c5b6e" }}>✎</span>
+      {editMode && <span style={{ fontSize: 15, color: "#5c5b6e" }}>✎</span>}
     </div>
   );
 }
 
+// Also remounted via `key` on edit-mode toggle — see EditableName above.
 function ProfileField({ field, value, onChange }) {
+  const { editMode } = useEditMode();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value);
 
@@ -85,21 +95,24 @@ function ProfileField({ field, value, onChange }) {
         <div style={{ flex: 1, minWidth: 0, fontSize: 16, color: "#33323f", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</div>
       )}
       <div style={{ fontSize: 15, color: "#e8a53a", width: 14, textAlign: "center" }}>{field.warn}</div>
-      <div
-        className="dl-tap"
-        onClick={() => {
-          setDraft(value);
-          setEditing(true);
-        }}
-        style={{ fontSize: 15, color: "#5c5b6e", width: 18, textAlign: "center" }}
-      >
-        ✎
-      </div>
+      {editMode && (
+        <div
+          className="dl-tap"
+          onClick={() => {
+            setDraft(value);
+            setEditing(true);
+          }}
+          style={{ fontSize: 15, color: "#5c5b6e", width: 18, textAlign: "center" }}
+        >
+          ✎
+        </div>
+      )}
     </div>
   );
 }
 
 export default function ProfileScreen({ profile, refreshing, onFieldChange, onBack, onRefresh, onShare, onOpenVcard, onQuickLink }) {
+  const { editMode } = useEditMode();
   return (
     <div style={{ position: "absolute", inset: 0, zIndex: 40, display: "flex", flexDirection: "column", background: "#f4f4f7", animation: "dlPush .34s cubic-bezier(.22,1,.36,1) both" }}>
       <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden", paddingBottom: 40 }}>
@@ -141,7 +154,7 @@ export default function ProfileScreen({ profile, refreshing, onFieldChange, onBa
               fallback={getInitials(profile.name)}
             />
           </div>
-          <EditableName value={profile.name} onChange={onFieldChange} />
+          <EditableName key={editMode} value={profile.name} onChange={onFieldChange} />
           <div
             style={{
               marginTop: 10,
@@ -170,7 +183,7 @@ export default function ProfileScreen({ profile, refreshing, onFieldChange, onBa
 
         <div style={{ margin: "22px 16px 0", background: "#fff", borderRadius: 14, boxShadow: "0 4px 14px rgba(27,27,45,.07)", overflow: "hidden", animation: "dlRise .45s ease .16s both" }}>
           {PROFILE_FIELDS.map((f) => (
-            <ProfileField key={f.key} field={f} value={profile[f.key]} onChange={onFieldChange} />
+            <ProfileField key={`${f.key}-${editMode}`} field={f} value={profile[f.key]} onChange={onFieldChange} />
           ))}
         </div>
 
