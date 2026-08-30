@@ -1,6 +1,9 @@
 export const DEFAULT_USER_NAME = "Ashish Mahale";
 
-export const DOCS = [
+// All document definitions the app knows about. Which ones actually show
+// up is controlled by ENABLED_DOC_IDS below — data stays intact either way,
+// so re-enabling a document is just adding its id back to that list.
+const ALL_DOCS = [
   {
     id: "aadhaar",
     title: "Aadhaar Card",
@@ -65,7 +68,7 @@ export const DOCS = [
   },
 ];
 
-export const CATALOG = DOCS.concat([
+const ALL_CATALOG_EXTRAS = [
   {
     id: "cbse12",
     title: "Class XII Marksheet",
@@ -115,7 +118,14 @@ export const CATALOG = DOCS.concat([
       { label: "Address", value: "XXXX, XXXX - XXXXXX" },
     ],
   },
-]);
+];
+
+// Only these are turned on right now — add ids back here to bring a
+// document back into Home / Issued / Search.
+const ENABLED_DOC_IDS = ["aadhaar", "dl"];
+
+export const DOCS = ALL_DOCS.filter((d) => ENABLED_DOC_IDS.includes(d.id));
+export const CATALOG = ALL_DOCS.concat(ALL_CATALOG_EXTRAS).filter((d) => ENABLED_DOC_IDS.includes(d.id));
 
 export const UTILITY_LABELS = [
   "Authenticator",

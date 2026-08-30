@@ -1,5 +1,6 @@
 import { getInitials } from "../avatar";
 import LogoSlot from "./LogoSlot";
+import AppMark from "./AppMark";
 import { useEditMode } from "../editMode";
 
 // Purely presentational — the enclosing row owns the click, so the whole
@@ -67,6 +68,21 @@ export default function MenuScreen({ userName, onOpenProfile, menuRows }) {
             <div style={{ marginTop: 2, fontSize: 12, color: "#8c8ba0" }}>Show logo/photo upload and field edit controls</div>
           </div>
           <Switch checked={editMode} />
+        </div>
+
+        <div style={{ background: "#fff", borderRadius: 14, padding: "14px 18px", marginBottom: 16, display: "flex", alignItems: "center", gap: 14, boxShadow: "0 3px 12px rgba(27,27,45,.06)" }}>
+          <LogoSlot
+            slotKey="appIcon"
+            alt="App icon"
+            editSize={16}
+            imgFit="cover"
+            style={{ width: 44, height: 44, borderRadius: 12, background: "#ede9fc" }}
+            fallback={<AppMark size={44} rx={12} />}
+          />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 16, fontWeight: 700 }}>App Icon</div>
+            <div style={{ marginTop: 2, fontSize: 12, color: "#8c8ba0" }}>Browser tab and home screen icon</div>
+          </div>
         </div>
 
         <div style={{ background: "#fff", borderRadius: 14, overflow: "hidden", boxShadow: "0 3px 12px rgba(27,27,45,.06)" }}>

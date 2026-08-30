@@ -9,6 +9,7 @@ import DocumentScreen from "./components/DocumentScreen";
 import TabBar from "./components/TabBar";
 import BottomSheet from "./components/BottomSheet";
 import Toast from "./components/Toast";
+import AppIconManager from "./components/AppIconManager";
 import { loadProfile, saveProfile } from "./storage";
 import { loadDocFields, saveDocFields } from "./docStorage";
 import { EditModeContext } from "./editMode";
@@ -113,6 +114,8 @@ export default function App() {
   return (
     <EditModeContext.Provider value={{ editMode, setEditMode }}>
       <div className="dl-phone">
+        <AppIconManager />
+
         {isSplash && <SplashScreen />}
 
         {onTabs && tab === "home" && (
