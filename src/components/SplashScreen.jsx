@@ -31,6 +31,7 @@ export default function SplashScreen() {
           slotKey="appMark"
           alt="App logo"
           editable={false}
+          imgFit="contain"
           style={{ width: 112, height: 112, borderRadius: 18 }}
           fallback={<AppMark size={112} />}
         />

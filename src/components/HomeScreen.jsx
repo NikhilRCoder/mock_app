@@ -24,6 +24,7 @@ export default function HomeScreen({ userName, onOpenProfile, onGoIssued, onOpen
               slotKey="appMark"
               alt="App logo"
               editSize={14}
+              imgFit="contain"
               style={{ width: 32, height: 32, borderRadius: 9 }}
               fallback={<AppMark size={32} rx="9" />}
             />
