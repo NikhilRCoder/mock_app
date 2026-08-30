@@ -1,7 +1,44 @@
 import { getInitials } from "../avatar";
 import LogoSlot from "./LogoSlot";
+import { useEditMode } from "../editMode";
+
+// Purely presentational — the enclosing row owns the click, so the whole
+// row (label included) is one tap target instead of two competing ones.
+function Switch({ checked }) {
+  return (
+    <div
+      role="switch"
+      aria-checked={checked}
+      style={{
+        width: 46,
+        height: 27,
+        borderRadius: 14,
+        background: checked ? "#22a25a" : "#d5d4e0",
+        position: "relative",
+        flex: "none",
+        transition: "background .18s ease",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: 2,
+          left: checked ? 21 : 2,
+          width: 23,
+          height: 23,
+          borderRadius: "50%",
+          background: "#fff",
+          boxShadow: "0 1px 3px rgba(0,0,0,.3)",
+          transition: "left .18s ease",
+        }}
+      />
+    </div>
+  );
+}
 
 export default function MenuScreen({ userName, onOpenProfile, menuRows }) {
+  const { editMode, setEditMode } = useEditMode();
+
   return (
     <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", background: "#f4f4f7", animation: "dlTab .3s ease both" }}>
       <div style={{ background: "#4c31ea", padding: "calc(20px + env(safe-area-inset-top)) 20px 22px", color: "#fff", display: "flex", alignItems: "center", gap: 14 }}>
@@ -20,6 +57,18 @@ export default function MenuScreen({ userName, onOpenProfile, menuRows }) {
         </div>
       </div>
       <div style={{ flex: 1, overflowY: "auto", padding: "16px 16px 104px" }}>
+        <div
+          className="dl-tap"
+          onClick={() => setEditMode((v) => !v)}
+          style={{ background: "#fff", borderRadius: 14, padding: "14px 18px", marginBottom: 16, display: "flex", alignItems: "center", gap: 14, boxShadow: "0 3px 12px rgba(27,27,45,.06)" }}
+        >
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 16, fontWeight: 700 }}>Edit Mode</div>
+            <div style={{ marginTop: 2, fontSize: 12, color: "#8c8ba0" }}>Show logo/photo upload and field edit controls</div>
+          </div>
+          <Switch checked={editMode} />
+        </div>
+
         <div style={{ background: "#fff", borderRadius: 14, overflow: "hidden", boxShadow: "0 3px 12px rgba(27,27,45,.06)" }}>
           {menuRows.map((m) => (
             <div

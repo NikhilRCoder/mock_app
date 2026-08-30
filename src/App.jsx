@@ -101,33 +101,6 @@ export default function App() {
   return (
     <EditModeContext.Provider value={{ editMode, setEditMode }}>
       <div className="dl-phone">
-        {!isSplash && (
-          <button
-            type="button"
-            onClick={() => setEditMode((e) => !e)}
-            style={{
-              position: "absolute",
-              top: "calc(10px + env(safe-area-inset-top))",
-              right: 14,
-              zIndex: 95,
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              padding: "7px 13px",
-              borderRadius: 20,
-              border: "none",
-              background: editMode ? "#22a25a" : "rgba(27,27,45,.55)",
-              color: "#fff",
-              fontSize: 12,
-              fontWeight: 700,
-              cursor: "pointer",
-              backdropFilter: "blur(4px)",
-            }}
-          >
-            {editMode ? "✓ Done Editing" : "✎ Edit"}
-          </button>
-        )}
-
         {isSplash && <SplashScreen />}
 
         {onTabs && tab === "home" && (
