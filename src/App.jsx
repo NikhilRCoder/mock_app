@@ -152,7 +152,7 @@ export default function App() {
         {onTabs && tab === "issued" && <IssuedScreen onOpenDoc={openDoc} />}
 
         {onTabs && tab === "menu" && (
-          <MenuScreen userName={profile.name} onOpenProfile={openProfile} menuRows={menuRows} onLock={lockApp} onToast={showToast} />
+          <MenuScreen userName={profile.name} onOpenProfile={openProfile} menuRows={menuRows} onLock={lockApp} />
         )}
 
         {isProfile && (

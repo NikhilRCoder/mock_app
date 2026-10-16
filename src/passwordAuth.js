@@ -3,13 +3,11 @@
 // disable JS), only a casual deterrent to keep random visitors out. The
 // password is hashed (SHA-256) rather than stored in plaintext purely so
 // it isn't trivially readable at a glance in the repo or devtools.
-const KEY = "digilocker.passwordHash.v1";
+//
+// Fixed — there is no in-app way to change it. To set a different one,
+// replace DEFAULT_HASH with sha256Hex("your password") here in source.
 const UNLOCKED_KEY = "digilocker.unlocked.v1";
-
-// Default password: "digilocker123" — change it from Menu once unlocked,
-// or replace this with sha256Hex("your password") to pick a different
-// out-of-the-box default.
-const DEFAULT_HASH = "d8832bdcbe2c8f5a00ba4cf3f0ca75329fd6a17d3b67d5b905ea92642179cb8f";
+const DEFAULT_HASH = "25a674d5ccfbec4752f3c9bb5b5af2847d38a829dc3eb1ccc808377e5abbd726"; // "connect557"
 
 async function sha256Hex(text) {
   const data = new TextEncoder().encode(text);
@@ -19,27 +17,9 @@ async function sha256Hex(text) {
     .join("");
 }
 
-export async function getStoredHash() {
-  try {
-    return localStorage.getItem(KEY) || DEFAULT_HASH;
-  } catch {
-    return DEFAULT_HASH;
-  }
-}
-
 export async function verifyPassword(attempt) {
   const hash = await sha256Hex(attempt);
-  const stored = await getStoredHash();
-  return hash === stored;
-}
-
-export async function setPassword(newPassword) {
-  const hash = await sha256Hex(newPassword);
-  try {
-    localStorage.setItem(KEY, hash);
-  } catch {
-    // localStorage unavailable — new password only holds for this session.
-  }
+  return hash === DEFAULT_HASH;
 }
 
 export function isUnlocked() {

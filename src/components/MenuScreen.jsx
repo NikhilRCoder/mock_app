@@ -3,7 +3,6 @@ import { getInitials } from "../avatar";
 import LogoSlot from "./LogoSlot";
 import AppMark from "./AppMark";
 import { useEditMode } from "../editMode";
-import { setPassword } from "../passwordAuth";
 import { getAttempts, clearAttempts } from "../tracker";
 
 // Purely presentational — the enclosing row owns the click, so the whole
@@ -36,55 +35,6 @@ function Switch({ checked }) {
           transition: "left .18s ease",
         }}
       />
-    </div>
-  );
-}
-
-function ChangePasswordRow({ onToast }) {
-  const [open, setOpen] = useState(false);
-  const [next, setNext] = useState("");
-  const [confirm, setConfirm] = useState("");
-
-  function save() {
-    if (!next || next !== confirm) {
-      onToast("Passwords don't match");
-      return;
-    }
-    setPassword(next);
-    setNext("");
-    setConfirm("");
-    setOpen(false);
-    onToast("Password changed");
-  }
-
-  return (
-    <div style={{ padding: "16px 18px", borderTop: "1px solid #f0eff5" }}>
-      <div className="dl-tap" onClick={() => setOpen((v) => !v)} style={{ display: "flex", alignItems: "center", gap: 14 }}>
-        <div style={{ width: 22, height: 22, flex: "none", border: "1.2px dashed #c3c2d2", borderRadius: 6 }} />
-        <div style={{ flex: 1, fontSize: 16, fontWeight: 600, color: "#1b1b22" }}>Change Password</div>
-        <span style={{ fontSize: 17, color: "#c3c2d2" }}>{open ? "⌄" : "›"}</span>
-      </div>
-      {open && (
-        <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-          <input
-            type="password"
-            value={next}
-            onChange={(e) => setNext(e.target.value)}
-            placeholder="New password"
-            style={{ padding: "10px 12px", borderRadius: 10, border: "1px solid #d5d4e0", fontSize: 14, fontFamily: "inherit" }}
-          />
-          <input
-            type="password"
-            value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
-            placeholder="Confirm new password"
-            style={{ padding: "10px 12px", borderRadius: 10, border: "1px solid #d5d4e0", fontSize: 14, fontFamily: "inherit" }}
-          />
-          <div className="dl-tap" onClick={save} style={{ textAlign: "center", padding: 11, borderRadius: 20, background: "#4c31ea", color: "#fff", fontSize: 14, fontWeight: 700 }}>
-            Save New Password
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -140,7 +90,7 @@ function AttemptsRow() {
   );
 }
 
-export default function MenuScreen({ userName, onOpenProfile, menuRows, onLock, onToast }) {
+export default function MenuScreen({ userName, onOpenProfile, menuRows, onLock }) {
   const { editMode, setEditMode } = useEditMode();
 
   return (
@@ -198,7 +148,6 @@ export default function MenuScreen({ userName, onOpenProfile, menuRows, onLock, 
             <div style={{ flex: 1, fontSize: 16, fontWeight: 600, color: "#1b1b22" }}>Lock App Now</div>
             <span style={{ fontSize: 17, color: "#c3c2d2" }}>›</span>
           </div>
-          <ChangePasswordRow onToast={onToast} />
           <AttemptsRow />
         </div>
 
