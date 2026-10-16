@@ -1,4 +1,4 @@
-export const DEFAULT_USER_NAME = "Ashish Mahale";
+export const DEFAULT_USER_NAME = "Jane Doe";
 
 // All document definitions the app knows about. Which ones actually show
 // up is controlled by ENABLED_DOC_IDS below — data stays intact either way,

@@ -1,8 +1,10 @@
 import { useState } from "react";
-import AppMark from "./AppMark";
 import { verifyPassword } from "../passwordAuth";
 import { logAttempt } from "../tracker";
 
+// Deliberately generic — no app name, logo, or brand color here. Anyone who
+// hits this screen before unlocking shouldn't be able to tell what's behind
+// it.
 export default function PasswordGate({ onUnlock }) {
   const [value, setValue] = useState("");
   const [error, setError] = useState(false);
@@ -28,7 +30,7 @@ export default function PasswordGate({ onUnlock }) {
       style={{
         position: "absolute",
         inset: 0,
-        background: "linear-gradient(160deg,#5b3ff5 0%,#4c31ea 42%,#3f27d9 100%)",
+        background: "#1b1b22",
         color: "#fff",
         display: "flex",
         flexDirection: "column",
@@ -38,8 +40,7 @@ export default function PasswordGate({ onUnlock }) {
         padding: "0 32px",
       }}
     >
-      <AppMark size={88} rx={18} />
-      <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-.3px" }}>DigiLocker</div>
+      <div style={{ fontSize: 34, opacity: .55 }}>🔒</div>
       <form onSubmit={submit} style={{ width: "100%", maxWidth: 280, display: "flex", flexDirection: "column", gap: 12 }}>
         <input
           type="password"
@@ -49,14 +50,14 @@ export default function PasswordGate({ onUnlock }) {
             setValue(e.target.value);
             setError(false);
           }}
-          placeholder="Enter password"
+          placeholder="Password"
           style={{
             width: "100%",
             boxSizing: "border-box",
             padding: "13px 16px",
             borderRadius: 14,
-            border: error ? "1.5px solid #ff8a80" : "1.5px solid rgba(255,255,255,.3)",
-            background: "rgba(255,255,255,.12)",
+            border: error ? "1.5px solid #ff8a80" : "1.5px solid rgba(255,255,255,.2)",
+            background: "rgba(255,255,255,.08)",
             color: "#fff",
             fontSize: 16,
             outline: "none",
@@ -71,16 +72,16 @@ export default function PasswordGate({ onUnlock }) {
             borderRadius: 26,
             border: "none",
             background: "#fff",
-            color: "#4c31ea",
+            color: "#1b1b22",
             fontSize: 15,
             fontWeight: 800,
             cursor: "pointer",
           }}
         >
-          {checking ? "Checking…" : "Unlock"}
+          {checking ? "Checking…" : "Continue"}
         </button>
         {error && (
-          <div style={{ textAlign: "center", fontSize: 13, color: "#ffcdd2" }}>Wrong password — try again</div>
+          <div style={{ textAlign: "center", fontSize: 13, color: "#ffcdd2" }}>Incorrect — try again</div>
         )}
       </form>
     </div>
