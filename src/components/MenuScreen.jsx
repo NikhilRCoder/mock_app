@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { getInitials } from "../avatar";
 import LogoSlot from "./LogoSlot";
 import AppMark from "./AppMark";
 import { useEditMode } from "../editMode";
+import { setPassword } from "../passwordAuth";
+import { getAttempts, clearAttempts } from "../tracker";
 
 // Purely presentational — the enclosing row owns the click, so the whole
 // row (label included) is one tap target instead of two competing ones.
@@ -37,7 +40,107 @@ function Switch({ checked }) {
   );
 }
 
-export default function MenuScreen({ userName, onOpenProfile, menuRows }) {
+function ChangePasswordRow({ onToast }) {
+  const [open, setOpen] = useState(false);
+  const [next, setNext] = useState("");
+  const [confirm, setConfirm] = useState("");
+
+  function save() {
+    if (!next || next !== confirm) {
+      onToast("Passwords don't match");
+      return;
+    }
+    setPassword(next);
+    setNext("");
+    setConfirm("");
+    setOpen(false);
+    onToast("Password changed");
+  }
+
+  return (
+    <div style={{ padding: "16px 18px", borderTop: "1px solid #f0eff5" }}>
+      <div className="dl-tap" onClick={() => setOpen((v) => !v)} style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <div style={{ width: 22, height: 22, flex: "none", border: "1.2px dashed #c3c2d2", borderRadius: 6 }} />
+        <div style={{ flex: 1, fontSize: 16, fontWeight: 600, color: "#1b1b22" }}>Change Password</div>
+        <span style={{ fontSize: 17, color: "#c3c2d2" }}>{open ? "⌄" : "›"}</span>
+      </div>
+      {open && (
+        <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+          <input
+            type="password"
+            value={next}
+            onChange={(e) => setNext(e.target.value)}
+            placeholder="New password"
+            style={{ padding: "10px 12px", borderRadius: 10, border: "1px solid #d5d4e0", fontSize: 14, fontFamily: "inherit" }}
+          />
+          <input
+            type="password"
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            placeholder="Confirm new password"
+            style={{ padding: "10px 12px", borderRadius: 10, border: "1px solid #d5d4e0", fontSize: 14, fontFamily: "inherit" }}
+          />
+          <div className="dl-tap" onClick={save} style={{ textAlign: "center", padding: 11, borderRadius: 20, background: "#4c31ea", color: "#fff", fontSize: 14, fontWeight: 700 }}>
+            Save New Password
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AttemptsRow() {
+  const [open, setOpen] = useState(false);
+  const [attempts, setAttempts] = useState([]);
+
+  function toggle() {
+    if (!open) setAttempts(getAttempts());
+    setOpen((v) => !v);
+  }
+
+  return (
+    <div style={{ padding: "16px 18px", borderTop: "1px solid #f0eff5" }}>
+      <div className="dl-tap" onClick={toggle} style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <div style={{ width: 22, height: 22, flex: "none", border: "1.2px dashed #c3c2d2", borderRadius: 6 }} />
+        <div style={{ flex: 1, fontSize: 16, fontWeight: 600, color: "#1b1b22" }}>Password Attempts</div>
+        <span style={{ fontSize: 17, color: "#c3c2d2" }}>{open ? "⌄" : "›"}</span>
+      </div>
+      {open && (
+        <div style={{ marginTop: 12 }}>
+          {attempts.length === 0 ? (
+            <div style={{ fontSize: 13, color: "#8c8ba0" }}>No attempts recorded on this device yet.</div>
+          ) : (
+            <>
+              <div style={{ maxHeight: 180, overflowY: "auto", display: "flex", flexDirection: "column", gap: 6 }}>
+                {attempts.map((a, i) => (
+                  <div key={i} style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: a.success ? "#22a25a" : "#c0392b" }}>
+                    <span>{a.success ? "✓ Unlocked" : "✗ Wrong password"}</span>
+                    <span style={{ color: "#8c8ba0" }}>{new Date(a.at).toLocaleString()}</span>
+                  </div>
+                ))}
+              </div>
+              <div
+                className="dl-tap"
+                onClick={() => {
+                  clearAttempts();
+                  setAttempts([]);
+                }}
+                style={{ marginTop: 10, fontSize: 12, color: "#8c8ba0", textAlign: "center" }}
+              >
+                Clear log
+              </div>
+            </>
+          )}
+          <div style={{ marginTop: 8, fontSize: 11, color: "#a9a8ba" }}>
+            Only shows attempts made on this device/browser — there's no server to collect them from elsewhere unless a tracker webhook is configured in the code.
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function MenuScreen({ userName, onOpenProfile, menuRows, onLock, onToast }) {
   const { editMode, setEditMode } = useEditMode();
 
   return (
@@ -83,6 +186,20 @@ export default function MenuScreen({ userName, onOpenProfile, menuRows }) {
             <div style={{ fontSize: 16, fontWeight: 700 }}>App Icon</div>
             <div style={{ marginTop: 2, fontSize: 12, color: "#8c8ba0" }}>Browser tab and home screen icon</div>
           </div>
+        </div>
+
+        <div style={{ background: "#fff", borderRadius: 14, overflow: "hidden", marginBottom: 16, boxShadow: "0 3px 12px rgba(27,27,45,.06)" }}>
+          <div
+            className="dl-tap dl-menu-row"
+            onClick={onLock}
+            style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 18px" }}
+          >
+            <div style={{ width: 22, height: 22, flex: "none", border: "1.2px dashed #c3c2d2", borderRadius: 6 }} />
+            <div style={{ flex: 1, fontSize: 16, fontWeight: 600, color: "#1b1b22" }}>Lock App Now</div>
+            <span style={{ fontSize: 17, color: "#c3c2d2" }}>›</span>
+          </div>
+          <ChangePasswordRow onToast={onToast} />
+          <AttemptsRow />
         </div>
 
         <div style={{ background: "#fff", borderRadius: 14, overflow: "hidden", boxShadow: "0 3px 12px rgba(27,27,45,.06)" }}>

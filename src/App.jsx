@@ -10,11 +10,14 @@ import TabBar from "./components/TabBar";
 import BottomSheet from "./components/BottomSheet";
 import Toast from "./components/Toast";
 import AppIconManager from "./components/AppIconManager";
+import PasswordGate from "./components/PasswordGate";
 import { loadProfile, saveProfile } from "./storage";
 import { loadDocFields, saveDocFields } from "./docStorage";
+import { isUnlocked, setUnlocked } from "./passwordAuth";
 import { EditModeContext } from "./editMode";
 
 export default function App() {
+  const [locked, setLocked] = useState(() => !isUnlocked());
   const [screen, setScreen] = useState("splash"); // "splash" | "tabs" | "profile" | "document"
   const [tab, setTab] = useState("home"); // "home" | "search" | "issued" | "menu"
   const [viewingDoc, setViewingDoc] = useState(null);
@@ -78,6 +81,11 @@ export default function App() {
     setTab("home");
   }
 
+  function lockApp() {
+    setUnlocked(false);
+    setLocked(true);
+  }
+
   function updateProfile(key, value) {
     setProfile((prev) => {
       const next = { ...prev, [key]: value };
@@ -111,6 +119,15 @@ export default function App() {
   const isDocument = screen === "document";
   const indicatorColor = isSplash ? "#ffffff" : "#1b1b22";
 
+  if (locked) {
+    return (
+      <div className="dl-phone">
+        <AppIconManager />
+        <PasswordGate onUnlock={() => { setUnlocked(true); setLocked(false); }} />
+      </div>
+    );
+  }
+
   return (
     <EditModeContext.Provider value={{ editMode, setEditMode }}>
       <div className="dl-phone">
@@ -135,7 +152,7 @@ export default function App() {
         {onTabs && tab === "issued" && <IssuedScreen onOpenDoc={openDoc} />}
 
         {onTabs && tab === "menu" && (
-          <MenuScreen userName={profile.name} onOpenProfile={openProfile} menuRows={menuRows} />
+          <MenuScreen userName={profile.name} onOpenProfile={openProfile} menuRows={menuRows} onLock={lockApp} onToast={showToast} />
         )}
 
         {isProfile && (
